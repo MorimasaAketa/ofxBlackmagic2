@@ -178,9 +178,9 @@ namespace ofxBlackmagic {
 				this->texture.allocate(this->videoFrame.getWidth(), this->videoFrame.getHeight(), GL_RGBA);
 			}
 
-			this->videoFrame.lock.lock();
+//			this->videoFrame.lock.lock();
 			this->texture.loadData(this->videoFrame.getPixels(), GL_RGBA);
-			this->videoFrame.lock.unlock();
+//			this->videoFrame.lock.unlock();
 		}
 	}
 
