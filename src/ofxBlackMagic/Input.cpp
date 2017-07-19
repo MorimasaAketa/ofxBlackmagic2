@@ -161,9 +161,9 @@ namespace ofxBlackmagic {
 			return S_OK;
 		}
 
-		this->videoFrame.lock.lock();
+		//this->videoFrame.lock.lock();
 		this->videoFrame.copyFromFrame(videoFrame);
-		this->videoFrame.lock.unlock();
+		//this->videoFrame.lock.unlock();
 		this->newFrameReady = true;
 
 		return S_OK;
