@@ -102,8 +102,10 @@ namespace ofxBlackmagic {
 	}
 
 	//---------
-	bool Input::isFrameNew() const {
-		return this->isFrameNewFlag;
+	bool Input::isFrameNew() {
+		bool flag = this->isFrameNewFlag;
+		this->isFrameNewFlag = false;
+		return flag;
 	}
 	
 	//---------
@@ -126,6 +128,7 @@ namespace ofxBlackmagic {
 				if (detectedSignalFlags & bmdDetectedVideoInputRGB444) {
 					pixelFormat = bmdFormat10BitRGB;
 				}
+
 
 				// Restart capture with the new video mode if told to
 				if (shouldRestartCaptureWithNewVideoMode) {
