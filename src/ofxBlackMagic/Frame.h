@@ -1,9 +1,13 @@
 #pragma once
+#include <vector>
+#include <string>
+#include <ostream>
 
 #include "Utils.h"
 #include "ofPixels.h"
 #include "ofBaseTypes.h"
 #include "ofTypes.h"
+
 
 namespace ofxBlackmagic {
 	/// RGB pixels
@@ -18,9 +22,11 @@ namespace ofxBlackmagic {
 
 		Frame();
 		~Frame();
+
 		void allocate(int width, int height);
 		void deallocate();
 		void copyFromFrame(IDeckLinkVideoFrame*);
+		void swapFrame(Frame& fr);
 
 		int getWidth() const;
 		int getHeight() const;
@@ -73,4 +79,4 @@ namespace ofxBlackmagic {
 	};
 }
 
-ostream & operator<<(ostream &, const ofxBlackmagic::Frame::Timecode &);
+std::ostream & operator<<(std::ostream &, const ofxBlackmagic::Frame::Timecode &);
