@@ -9,6 +9,12 @@
 namespace ofxBlackmagic {
 	class Input : public IDeckLinkInputCallback, public ofBaseUpdates, public ofBaseDraws, public ofBaseHasPixels, public ofBaseHasTexture {
 	public:
+		enum DepthPrefer
+		{
+			DEPTH_8BIT,
+			DEPTH_10BIT
+		};
+
 		Input();
 		virtual ~Input();
 		
@@ -20,22 +26,26 @@ namespace ofxBlackmagic {
 		bool isFrameNew();
 		DeviceDefinition& getDevice();
 		Frame & getFrame();
+		
+		void setUseDeckLinkColorConverter(bool);
+		bool isUseDeckLinkColorConverter() const;
+		float getCaptureFps() const;
 
 		//--
 		//IDeckLinkInputCallback
 		//
 #if defined(_WIN32)
-		HRESULT STDMETHODCALLTYPE VideoInputFormatChanged(unsigned long, IDeckLinkDisplayMode*, unsigned long) override;
+		virtual HRESULT STDMETHODCALLTYPE VideoInputFormatChanged(unsigned long, IDeckLinkDisplayMode*, unsigned long) override;
 #elif defined(__APPLE_CC__)
-		HRESULT STDMETHODCALLTYPE VideoInputFormatChanged(BMDVideoInputFormatChangedEvents notificationEvents, IDeckLinkDisplayMode *newDisplayMode, BMDDetectedVideoInputFormatFlags detectedSignalFlags) override;
+		virtual HRESULT STDMETHODCALLTYPE VideoInputFormatChanged(BMDVideoInputFormatChangedEvents notificationEvents, IDeckLinkDisplayMode *newDisplayMode, BMDDetectedVideoInputFormatFlags detectedSignalFlags) override;
 #endif
 
-		HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(IDeckLinkVideoInputFrame*, IDeckLinkAudioInputPacket*) override;
+		virtual HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(IDeckLinkVideoInputFrame*, IDeckLinkAudioInputPacket*) override;
 		
 #if defined(_WIN32)
-		HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, _COM_Outptr_ void __RPC_FAR *__RPC_FAR *ppvObject) override;
+		virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, _COM_Outptr_ void __RPC_FAR *__RPC_FAR *ppvObject) override;
 #elif defined(__APPLE_CC__)
-		HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) override { return S_OK; };
+		virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) override { return S_OK; };
 #endif
 
 		ULONG STDMETHODCALLTYPE AddRef(void) override { return ++referenceCount; };
@@ -82,10 +92,14 @@ namespace ofxBlackmagic {
 		//
 		//--
 
+		DepthPrefer getDepthPrefer() const { return depthPrefer; }
+		void setDepthPrefer(DepthPrefer dp) { depthPrefer = dp; }
 	protected:
 		DeviceDefinition device;
 		IDeckLinkInput* input;
 		Frame videoFrame;
+		Frame videoFrameBack;
+		Frame videoFrameInput;
 		ofTexture texture;
 		bool useTexture;
 
@@ -93,5 +107,11 @@ namespace ofxBlackmagic {
 		bool newFrameReady; // pre-update
 		bool isFrameNewFlag; // post-update
 		unsigned long referenceCount;
+
+		bool useDeckLinkColorConverter;
+
+		ofFpsCounter captureFps;
+
+		DepthPrefer depthPrefer;
 	};
 }

@@ -19,7 +19,11 @@ namespace ofxBlackmagic {
 
 		void publishTexture(ofTexture &tex);
 		void publishPixels(ofPixels &pix);
-
+		
+		void setEnableQueueMode(bool enable, int numbuffer = 2);
+		bool isEnableQueueMode() const { return b_queue_mode; }
+		void publishQueuedPixels(ofPixels &pix);
+		bool isQueueEmpty() const { return queued_pixels.empty(); }
 	protected:
 
 		IDeckLinkOutput* pDLOutput;
@@ -34,9 +38,13 @@ namespace ofxBlackmagic {
 		BMDTimeValue frameDuration;
 		BMDTimeScale frameTimescale;
 
+		bool b_queue_mode;
+		queue<ofPixels> queued_pixels;
 		ofPixels pixels[2];
 		ofPixels *front_buffer, *back_buffer;
-		ofMutex *mutex;
+		ofMutex mutex;
+		std::mutex lock_close;
+		std::condition_variable cv;
 		bool has_new_frame;
 
 		bool initDeckLink(const DeviceDefinition&);
@@ -51,8 +59,8 @@ namespace ofxBlackmagic {
 		virtual ULONG STDMETHODCALLTYPE AddRef(void) { return 1; }
 		virtual ULONG STDMETHODCALLTYPE Release(void) { return 1; }
 
-		virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(/* in */ IDeckLinkVideoFrame *completedFrame, /* in */ BMDOutputFrameCompletionResult result);
-		virtual HRESULT STDMETHODCALLTYPE   deScheduledPlaybackHasStopped(void) { return S_OK; }
+		virtual HRESULT ScheduledFrameCompleted(/* in */ IDeckLinkVideoFrame *completedFrame, /* in */ BMDOutputFrameCompletionResult result);
+		virtual HRESULT ScheduledPlaybackHasStopped(void) { return S_OK; }
 	};
 
 }
