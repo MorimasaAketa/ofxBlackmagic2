@@ -17,7 +17,7 @@ namespace ofxBlackmagic {
 			bool b_drop_frame;
 
 			int toFrameNum(int timebase) const;
-			string toString() const;
+			std::string toString() const;
 
 			bool operator==(const Timecode& vec) const;
 			bool operator!=(const Timecode& vec) const;
@@ -84,4 +84,4 @@ namespace ofxBlackmagic {
 	};
 }
 
-ostream & operator<<(ostream &, const ofxBlackmagic::Frame::Timecode &);
+std::ostream & operator<<(std::ostream &, const ofxBlackmagic::Frame::Timecode &);
