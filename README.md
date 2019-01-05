@@ -98,6 +98,20 @@ ofxBlackmagic2 is a little finicky about the order it is added in, and must be i
     }
     ```
 
+How to build from clean project in VS2017.
+-------
+
+These areasimple steps to build with oF 0.10.1, VS2017(v141) in 2019-01-05.
+
+1. Create a project uning project generator without adding ofxBlackMagic2.
+2. Add project ofxBlackmagicLib to the solution.
+3. Add ofxBlackmagicLib to the application project's reference, beside openframeworksLib.
+4. Set Default to the application project's properties -> c++ -> 'compile with', not 'as c++'.
+5. Add these path to additional include path of the application project.
+   - ..\..\..\addons\ofxBlackmagic2\src
+   - ..\..\..\addons\ofxBlackmagic2\ofxBlackmagicLib
+6. Set the target to x64.
+
 License
 -------
 

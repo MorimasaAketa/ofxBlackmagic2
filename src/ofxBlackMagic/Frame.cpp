@@ -238,7 +238,7 @@ namespace ofxBlackmagic {
 		return num;
 	}
 
-	string Frame::Timecode::toString() const
+	std::string Frame::Timecode::toString() const
 	{
 		if (b_drop_frame) {
 			return ofVAArgsToString("%02d:%02d:%02d;%02d",

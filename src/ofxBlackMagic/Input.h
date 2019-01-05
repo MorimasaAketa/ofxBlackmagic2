@@ -22,8 +22,7 @@ namespace ofxBlackmagic {
 		void stopCapture();
 		void setMode(const BMDDisplayMode&);
 
-		//bool isFrameNew() const;
-		bool isFrameNew();
+		bool isFrameNew() const;
 		DeviceDefinition& getDevice();
 		Frame & getFrame();
 		
